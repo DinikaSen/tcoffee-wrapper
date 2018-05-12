@@ -58,5 +58,5 @@ It will download the T-Coffee installer package to util/bin folder and launch in
   callback passed (err, output)
 
 #### Align RNA Sequences using rcoffee
-* .alignProCoffee (inputFile, callback)   
+* .alignRcoffee (inputFile, callback)   
   callback passed (err, output)
