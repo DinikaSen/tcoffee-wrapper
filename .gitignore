@@ -3,4 +3,3 @@ node_modules/
 dist/util/bin
 src/util/bin
 .idea*
-package-lock.json
