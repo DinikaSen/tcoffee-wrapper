@@ -1,7 +1,22 @@
-var child_process = require('child_process');
-var fs = require('fs');
-var path = require('path');
-var glob = require("glob");
+'use strict';
+
+var _child_process = require('child_process');
+
+var _child_process2 = _interopRequireDefault(_child_process);
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _glob = require('glob');
+
+var _glob2 = _interopRequireDefault(_glob);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var tcoffee = {};
 
@@ -54,59 +69,51 @@ tcoffee.alignRcoffee = function (inputFile, callback) {
     alignSequence('rna', 'rcoffee', inputFile, callback);
 };
 
-
 function alignSequence(seqType, mode, inputFile, callback) {
-    if(fs.existsSync(inputFile)){
-        var tcoffeeCommand = 't_coffee ' + path.resolve(inputFile);
+    if (_fs2.default.existsSync(inputFile)) {
+        var tcoffeeCommand = 't_coffee ' + _path2.default.resolve(inputFile);
         if (mode === 'default') {
             tcoffeeCommand += ' -type=' + seqType;
-
-        }
-        else {
+        } else {
             tcoffeeCommand += ' -mode=' + mode;
-
         }
         run(tcoffeeCommand, function (err) {
-            if(err){
+            if (err) {
                 return callback(err);
-            }
-            else{
+            } else {
                 var data = '';
-                var filename = path.basename(inputFile, path.extname(inputFile));
-                data = fs.readFileSync(__dirname+'/'+filename + '.aln', 'utf8');
+                var filename = _path2.default.basename(inputFile, _path2.default.extname(inputFile));
+                data = _fs2.default.readFileSync(__dirname + '/' + filename + '.aln', 'utf8');
                 deleteGeneratedFiles(inputFile, mode);
                 return callback(err, data);
             }
         });
-    }
-    else{
+    } else {
         var err = 'Input file does not exist';
         return callback(err, null);
     }
-
 }
 
 function run(command, callback) {
     console.log('RUNNING', command);
-    child_process.exec(command, {cwd: __dirname, maxBuffer: 1024 * 1000}, callback);
+    _child_process2.default.exec(command, { cwd: __dirname, maxBuffer: 1024 * 1000 }, callback);
 }
 
 function deleteGeneratedFiles(inputFile, mode) {
-    var filename = path.basename(inputFile, path.extname(inputFile));
-    fs.unlinkSync(__dirname+'/'+filename + '.aln');
-    fs.unlinkSync(__dirname+'/'+filename + '.dnd');
-    fs.unlinkSync(__dirname+'/'+filename + '.html');
+    var filename = _path2.default.basename(inputFile, _path2.default.extname(inputFile));
+    _fs2.default.unlinkSync(__dirname + '/' + filename + '.aln');
+    _fs2.default.unlinkSync(__dirname + '/' + filename + '.dnd');
+    _fs2.default.unlinkSync(__dirname + '/' + filename + '.html');
     if (mode === 'rcoffee') {
-        var matches = glob.GlobSync(__dirname+"/*.rfold").matches;
-        for (var file in matches[0]) {
-            fs.unlinkSync(file);
+        var match = _glob2.default.GlobSync(__dirname + '/*.rfold').matches;
+        for (var file in match[0]) {
+            _fs2.default.unlinkSync(file);
         }
-        var matches = glob.GlobSync(__dirname+"/*.template_list").matches;
-        for (var file in matches[0]) {
-            fs.unlinkSync(file);
+        var matches = _glob2.default.GlobSync(__dirname + '/*.template_list').matches;
+        for (var _file in matches[0]) {
+            _fs2.default.unlinkSync(_file);
         }
     }
 }
-
 
 module.exports = tcoffee;

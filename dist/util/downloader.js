@@ -1,35 +1,46 @@
-const os = require('os');
-var download = require('download-file');
-var child_process = require('child_process');
+'use strict';
+
+var _os = require('os');
+
+var _os2 = _interopRequireDefault(_os);
+
+var _downloadFile = require('download-file');
+
+var _downloadFile2 = _interopRequireDefault(_downloadFile);
+
+var _child_process = require('child_process');
+
+var _child_process2 = _interopRequireDefault(_child_process);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var address = 'http://www.tcoffee.org/Packages/Stable/Latest/';
-var platform = os.platform();
+var platform = _os2.default.platform();
 
-
-getTCoffee = function () {
+function getTCoffee() {
     switch (platform) {
-        case ('linux'):
+        case 'linux':
             address += 'linux/T-COFFEE_installer_Version_11.00.8cbe486_linux_x64.bin';
             downloadTC(address);
             break;
 
-        case ('darwin'):
+        case 'darwin':
             address += 'macosx/T-COFFEE_installer_Version_11.00.8cbe486_macosx_x64.dmg';
             downloadTC(address);
             break;
 
-        default :
+        default:
             console.log("T-Coffee is not available for your operating system type");
     }
 };
 
-makeExecutable = function (location) {
+function makeExecutable(location) {
     if (platform === 'linux') {
-        child_process.exec('chmod +x T-COFFEE_installer_Version_11.00.8cbe486_linux_x64.bin', {cwd: location}, function (err) {
+        _child_process2.default.exec('chmod +x T-COFFEE_installer_Version_11.00.8cbe486_linux_x64.bin', { cwd: location }, function (err) {
             if (err) {
                 console.log('ERROR: ' + err);
             } else {
-                child_process.exec('./T-COFFEE_installer_Version_11.00.8cbe486_linux_x64.bin', {cwd: location}, function (err) {
+                _child_process2.default.exec('./T-COFFEE_installer_Version_11.00.8cbe486_linux_x64.bin', { cwd: location }, function (err) {
                     if (err) {
                         console.log(err);
                     } else {
@@ -43,14 +54,13 @@ makeExecutable = function (location) {
     }
 };
 
-downloadTC = function (url) {
+function downloadTC(url) {
     console.log('Downloading T-Coffee from ', url);
-    download(url, {directory: './bin'}, function (err) {
+    (0, _downloadFile2.default)(url, { directory: './bin' }, function (err) {
         if (err) {
             console.log('Download failed');
             console.log(err);
-        }
-        else {
+        } else {
             console.log('Download complete');
             makeExecutable('./bin');
         }
